@@ -17,6 +17,7 @@ class _ExpensesState extends State<Expenses> {
         children: [
           AppBar(
             title: const Text('Expenses Tracker'),
+            backgroundColor: Color.fromRGBO(176, 206, 136, 100),
           ),
         ],
       ),
