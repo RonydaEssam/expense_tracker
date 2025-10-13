@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:expense_tracker/models/expense.dart';
-import 'package:expense_tracker/expenses_list.dart';
+import 'package:expense_tracker/widgets/expenses_list/expenses_list.dart';
 
 class Expenses extends StatefulWidget {
   const Expenses({super.key});
@@ -30,21 +30,14 @@ class _ExpensesState extends State<Expenses> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Expenses Tracker'),
+        backgroundColor: Color.fromRGBO(176, 206, 136, 100),
+      ),
       body: Column(
         children: [
-          AppBar(
-            title: const Text('Expenses Tracker'),
-            backgroundColor: Color.fromRGBO(176, 206, 136, 100),
-          ),
+          Text('Chart will be here ...'),
           Expanded(child: ExpensesList(expenses: _registeredExpenses)),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _registeredExpenses.length,
-              itemBuilder: (context, index) {
-                return Text(_registeredExpenses[index].title);
-              },
-            ),
-          ),
         ],
       ),
     );
