@@ -50,7 +50,10 @@ class _ExpensesState extends State<Expenses> {
       ),
       body: Column(
         children: [
-          Text('Chart will be here ...'),
+          Placeholder(
+            fallbackHeight: 180,
+          ),
+          SizedBox(height: 8),
           Expanded(child: ExpensesList(expenses: _registeredExpenses)),
         ],
       ),
