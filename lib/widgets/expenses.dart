@@ -38,9 +38,10 @@ class _ExpensesState extends State<Expenses> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Color.fromRGBO(249, 245, 240, 100),
       appBar: AppBar(
         title: const Text('Expenses Tracker'),
-        backgroundColor: Color.fromRGBO(176, 206, 136, 100),
+        backgroundColor: Color.fromRGBO(244, 153, 26, 100),
         actions: [
           IconButton(
             onPressed: _openAddExpenseOverlay,

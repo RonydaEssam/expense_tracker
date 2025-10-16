@@ -9,7 +9,7 @@ class ExpenseItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      surfaceTintColor: Color.fromRGBO(76, 118, 59, 100),
+      surfaceTintColor: Color.fromRGBO(52, 79, 31, 100),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -23,7 +23,7 @@ class ExpenseItem extends StatelessWidget {
             ),
             Row(
               children: [
-                Text('\$ ${expense.amount.toStringAsFixed(2)}'),
+                Text('${expense.amount.toStringAsFixed(2)} EGP'),
                 const Spacer(),
                 Row(
                   children: [
