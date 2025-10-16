@@ -1,9 +1,10 @@
-import 'package:expense_tracker/widgets/expenses_list/expenses_list.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/models/expense.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense({super.key, required this.onAddExpense});
+
+  final void Function(Expense expense) onAddExpense;
 
   @override
   State<NewExpense> createState() {
@@ -36,6 +37,58 @@ class _NewExpenseState extends State<NewExpense> {
     setState(() {
       _selectedDate = pickedDate;
     });
+  }
+
+  void _submitExpenseData() {
+    final titleIsInvalid = _titleController.text.trim().isEmpty;
+    final enteredAmount = double.tryParse(_amountController.text);
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+    final dateIsInvalid = _selectedDate == null;
+
+    String errorMessage = '';
+
+    if (titleIsInvalid) {
+      errorMessage = 'Please enter a valid title.';
+    } else if (amountIsInvalid) {
+      errorMessage = 'Please enter a valid amount.';
+    } else if (dateIsInvalid) {
+      errorMessage = 'Please enter a valid date.';
+    }
+
+    if (errorMessage.isNotEmpty) {
+      showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            title: Text(
+              'Invalid input',
+              textAlign: TextAlign.center,
+            ),
+            content: Text(errorMessage),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                },
+                child: Text('Okay'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+    // saving and creating the new expense
+    widget.onAddExpense(
+      Expense(
+        title: _titleController.text,
+        amount: enteredAmount!,
+        date: _selectedDate!,
+        category: _selectedCategory,
+      ),
+    );
+
+    Navigator.pop(context);
   }
 
   @override
@@ -115,10 +168,7 @@ class _NewExpenseState extends State<NewExpense> {
               ),
               SizedBox(width: 20),
               ElevatedButton(
-                onPressed: () {
-                  print(_titleController.text);
-                  print(_amountController.text);
-                },
+                onPressed: _submitExpenseData,
                 child: const Text('Save'),
               ),
             ],
