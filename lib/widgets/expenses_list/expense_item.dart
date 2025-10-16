@@ -17,19 +17,28 @@ class ExpenseItem extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Text(expense.title),
+            Text(
+              expense.title,
+              style: TextStyle(color: Colors.black, fontSize: 18),
+            ),
             SizedBox(
-              height: 4,
+              height: 12,
             ),
             Row(
               children: [
-                Text('${expense.amount.toStringAsFixed(2)} EGP'),
+                Text(
+                  '${expense.amount.toStringAsFixed(2)} EGP',
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
                 const Spacer(),
                 Row(
                   children: [
                     Icon(categoryIcons[expense.category]),
                     SizedBox(width: 8),
-                    Text(expense.formattedDate),
+                    Text(
+                      expense.formattedDate,
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                    ),
                   ],
                 ),
               ],

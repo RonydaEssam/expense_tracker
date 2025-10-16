@@ -60,7 +60,7 @@ class _NewExpenseState extends State<NewExpense> {
         context: context,
         builder: (ctx) {
           return AlertDialog(
-            title: Text(
+            title: const Text(
               'Invalid input',
               textAlign: TextAlign.center,
             ),
@@ -70,7 +70,7 @@ class _NewExpenseState extends State<NewExpense> {
                 onPressed: () {
                   Navigator.pop(ctx);
                 },
-                child: Text('Okay'),
+                child: const Text('Okay'),
               ),
             ],
           );
@@ -94,7 +94,7 @@ class _NewExpenseState extends State<NewExpense> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsetsGeometry.all(16),
+      padding: const EdgeInsetsGeometry.fromLTRB(20, 48, 20, 20),
       child: ListView(
         children: [
           TextField(
@@ -104,6 +104,7 @@ class _NewExpenseState extends State<NewExpense> {
               label: Text('Title'),
             ),
           ),
+          const SizedBox(height: 8),
           Row(
             children: [
               Expanded(
@@ -116,7 +117,7 @@ class _NewExpenseState extends State<NewExpense> {
                   keyboardType: TextInputType.number,
                 ),
               ),
-              SizedBox(width: 20),
+              const SizedBox(width: 20),
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -124,8 +125,9 @@ class _NewExpenseState extends State<NewExpense> {
                   children: [
                     Text(
                       _selectedDate == null
-                          ? 'No date selected'
+                          ? 'not selected'
                           : formatter.format(_selectedDate!),
+                      style: TextStyle(fontSize: 16),
                     ),
                     IconButton(
                       onPressed: _presentDatePicker,
@@ -136,7 +138,7 @@ class _NewExpenseState extends State<NewExpense> {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 28),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -146,7 +148,16 @@ class _NewExpenseState extends State<NewExpense> {
                     .map(
                       (category) => DropdownMenuItem(
                         value: category,
-                        child: Text(category.name.toUpperCase()),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          child: Text(
+                            category.name.toUpperCase(),
+                            style: TextStyle(fontWeight: FontWeight.w400),
+                          ),
+                        ),
                       ),
                     )
                     .toList(),
@@ -164,12 +175,18 @@ class _NewExpenseState extends State<NewExpense> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text('Cancel'),
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
               ),
-              SizedBox(width: 20),
+              SizedBox(width: 8),
               ElevatedButton(
                 onPressed: _submitExpenseData,
-                child: const Text('Save'),
+                child: const Text(
+                  'Save',
+                  style: TextStyle(color: Colors.black, fontSize: 18),
+                ),
               ),
             ],
           ),
