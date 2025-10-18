@@ -42,8 +42,27 @@ class _ExpensesState extends State<Expenses> {
     });
   }
 
+  void _removeExpense(Expense expense) {
+    setState(() {
+      _registeredExpenses.remove(expense);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget mainContent = const Center(
+      child: Text('No expenses found!\nStart adding some...'),
+    );
+
+    if (_registeredExpenses.isNotEmpty) {
+      mainContent = Expanded(
+        child: ExpensesList(
+          expenses: _registeredExpenses,
+          onRemoveExpense: _removeExpense,
+        ),
+      );
+    }
+
     return Scaffold(
       // backgroundColor: Color.fromRGBO(249, 245, 240, 100),
       appBar: AppBar(
@@ -62,7 +81,7 @@ class _ExpensesState extends State<Expenses> {
             fallbackHeight: 180,
           ),
           SizedBox(height: 8),
-          Expanded(child: ExpensesList(expenses: _registeredExpenses)),
+          mainContent,
         ],
       ),
     );
