@@ -9,17 +9,17 @@ class ExpenseItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      surfaceTintColor: Color.fromRGBO(52, 79, 31, 100),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
           vertical: 16,
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               expense.title,
-              style: TextStyle(color: Colors.black, fontSize: 18),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             SizedBox(
               height: 12,
@@ -28,7 +28,6 @@ class ExpenseItem extends StatelessWidget {
               children: [
                 Text(
                   '${expense.amount.toStringAsFixed(2)} EGP',
-                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
                 const Spacer(),
                 Row(
@@ -37,7 +36,6 @@ class ExpenseItem extends StatelessWidget {
                     SizedBox(width: 8),
                     Text(
                       expense.formattedDate,
-                      style: TextStyle(color: Colors.black, fontSize: 16),
                     ),
                   ],
                 ),

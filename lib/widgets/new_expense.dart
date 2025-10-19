@@ -127,7 +127,6 @@ class _NewExpenseState extends State<NewExpense> {
                       _selectedDate == null
                           ? 'not selected'
                           : formatter.format(_selectedDate!),
-                      style: TextStyle(fontSize: 16),
                     ),
                     IconButton(
                       onPressed: _presentDatePicker,
@@ -155,7 +154,6 @@ class _NewExpenseState extends State<NewExpense> {
                           ),
                           child: Text(
                             category.name.toUpperCase(),
-                            style: TextStyle(fontWeight: FontWeight.w400),
                           ),
                         ),
                       ),
@@ -177,15 +175,12 @@ class _NewExpenseState extends State<NewExpense> {
                 },
                 child: Text(
                   'Cancel',
-                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
               ),
-              SizedBox(width: 8),
               ElevatedButton(
                 onPressed: _submitExpenseData,
                 child: const Text(
-                  'Save',
-                  style: TextStyle(color: Colors.black, fontSize: 18),
+                  'Save Expense',
                 ),
               ),
             ],
