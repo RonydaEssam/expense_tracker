@@ -11,8 +11,8 @@ class ExpenseItem extends StatelessWidget {
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 16,
+          horizontal: 16,
+          vertical: 8,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -22,18 +22,18 @@ class ExpenseItem extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             SizedBox(
-              height: 12,
+              height: 4,
             ),
             Row(
               children: [
+                Icon(categoryIcons[expense.category]),
+                SizedBox(width: 6),
                 Text(
                   '${expense.amount.toStringAsFixed(2)} EGP',
                 ),
                 const Spacer(),
                 Row(
                   children: [
-                    Icon(categoryIcons[expense.category]),
-                    SizedBox(width: 8),
                     Text(
                       expense.formattedDate,
                     ),
