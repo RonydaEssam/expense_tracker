@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class ExpensesChart extends StatefulWidget {
-  const ExpensesChart({super.key});
+  const ExpensesChart({super.key, required this.expenses});
+
+  final List<Expense> expenses;
 
   @override
   State<ExpensesChart> createState() {
@@ -12,7 +14,27 @@ class ExpensesChart extends StatefulWidget {
 }
 
 class _ExpensesChartState extends State<ExpensesChart> {
-  int touchedIndex = 0;
+  int touchedIndex = -1;
+
+  List<Expense> get expenses => widget.expenses;
+
+  List<ExpenseBucket> get buckets {
+    return [
+      ExpenseBucket.forCategory(expenses, Category.food),
+      ExpenseBucket.forCategory(expenses, Category.leisure),
+      ExpenseBucket.forCategory(expenses, Category.travel),
+      ExpenseBucket.forCategory(expenses, Category.work),
+      ExpenseBucket.forCategory(expenses, Category.savings),
+    ];
+  }
+
+  double get totalExpenses {
+    double total = 0;
+    for (final bucket in buckets) {
+      total += bucket.totalExpenses;
+    }
+    return total;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +54,19 @@ class _ExpensesChartState extends State<ExpensesChart> {
         child: PieChart(
           PieChartData(
             pieTouchData: PieTouchData(
-              touchCallback: (FlTouchEvent event, PieTouchResponse) {
-                setState(() {
-                  if (!event.isInterestedForInteractions ||
-                      PieTouchResponse == null ||
-                      PieTouchResponse.touchedSection == null) {
-                    touchedIndex = -1;
-                    return;
-                  }
-                  touchedIndex =
-                      PieTouchResponse.touchedSection!.touchedSectionIndex;
-                });
-              },
+              touchCallback:
+                  (FlTouchEvent event, PieTouchResponse? pieTouchResponse) {
+                    setState(() {
+                      if (!event.isInterestedForInteractions ||
+                          pieTouchResponse == null ||
+                          pieTouchResponse.touchedSection == null) {
+                        touchedIndex = -1;
+                        return;
+                      }
+                      touchedIndex =
+                          pieTouchResponse.touchedSection!.touchedSectionIndex;
+                    });
+                  },
             ),
             borderData: FlBorderData(show: false),
             sectionsSpace: 0,
@@ -56,106 +79,59 @@ class _ExpensesChartState extends State<ExpensesChart> {
   }
 
   List<PieChartSectionData> showingSections() {
-    return List.generate(categoryIcons.length, (i) {
+    // Calculate all values ONCE, outside the loop
+    final categories = [
+      Category.food,
+      Category.leisure,
+      Category.savings,
+      Category.travel,
+      Category.work,
+    ];
+
+    final categoryValues = categories.map((category) {
+      return ExpenseBucket.forCategory(expenses, category).totalExpenses;
+    }).toList();
+
+    final total = totalExpenses;
+
+    return List.generate(categories.length, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 20.0 : 16.0;
       final radius = isTouched ? 110.0 : 100.0;
       final widgetSize = isTouched ? 50.0 : 40.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
 
-      return switch (i) {
-        0 => PieChartSectionData(
-          color: const Color.fromARGB(255, 232, 114, 114),
-          value: 40,
-          title: '40%',
-          radius: radius,
-          titleStyle: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.normal,
-            color: Colors.black,
-            shadows: shadows,
-          ),
-          badgeWidget: _Badge(
-            Icon(categoryIcons[Category.food]),
-            size: widgetSize,
-            borderColor: Colors.black,
-          ),
-          badgePositionPercentageOffset: .98,
+      final category = categories[i];
+      final value = categoryValues[i];
+      final percentage = total > 0 ? (value / total * 100) : 0;
+
+      final categoryNames = ['Food', 'Leisure', 'Savings', 'Travel', 'Work'];
+      final categoryColors = [
+        const Color.fromARGB(255, 232, 114, 114),
+        const Color.fromARGB(255, 255, 239, 121),
+        const Color.fromARGB(255, 184, 255, 136),
+        const Color.fromARGB(255, 111, 185, 253),
+        const Color.fromARGB(255, 255, 130, 253),
+      ];
+
+      return PieChartSectionData(
+        color: categoryColors[i],
+        value: value,
+        title: '${categoryNames[i]}:\n${percentage.toStringAsFixed(1)}%',
+        radius: radius,
+        titleStyle: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.normal,
+          color: Colors.black,
+          shadows: shadows,
         ),
-        1 => PieChartSectionData(
-          color: const Color.fromARGB(255, 255, 239, 121),
-          value: 30,
-          title: '30%',
-          radius: radius,
-          titleStyle: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.normal,
-            color: Colors.black,
-            shadows: shadows,
-          ),
-          badgeWidget: _Badge(
-            Icon(categoryIcons[Category.leisure]),
-            size: widgetSize,
-            borderColor: Colors.black,
-          ),
-          badgePositionPercentageOffset: .98,
+        badgeWidget: _Badge(
+          Icon(categoryIcons[category]),
+          size: widgetSize,
+          borderColor: Colors.black,
         ),
-        2 => PieChartSectionData(
-          color: const Color.fromARGB(255, 184, 255, 136),
-          value: 16,
-          title: '16%',
-          radius: radius,
-          titleStyle: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.normal,
-            color: Colors.black,
-            shadows: shadows,
-          ),
-          badgeWidget: _Badge(
-            Icon(categoryIcons[Category.savings]),
-            size: widgetSize,
-            borderColor: Colors.black,
-          ),
-          badgePositionPercentageOffset: .98,
-        ),
-        3 => PieChartSectionData(
-          color: const Color.fromARGB(255, 111, 185, 253),
-          value: 10,
-          title: '10%',
-          radius: radius,
-          titleStyle: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.normal,
-            color: Colors.black,
-            shadows: shadows,
-          ),
-          badgeWidget: _Badge(
-            Icon(categoryIcons[Category.travel]),
-            size: widgetSize,
-            borderColor: Colors.black,
-          ),
-          badgePositionPercentageOffset: .98,
-        ),
-        4 => PieChartSectionData(
-          color: const Color.fromARGB(255, 255, 130, 253),
-          value: 5,
-          title: '5%',
-          radius: radius,
-          titleStyle: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.normal,
-            color: Colors.black,
-            shadows: shadows,
-          ),
-          badgeWidget: _Badge(
-            Icon(categoryIcons[Category.work]),
-            size: widgetSize,
-            borderColor: Colors.black,
-          ),
-          badgePositionPercentageOffset: .98,
-        ),
-        _ => throw StateError('Invalid'),
-      };
+        badgePositionPercentageOffset: .98,
+      );
     });
   }
 }
@@ -186,7 +162,7 @@ class _Badge extends StatelessWidget {
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: .5),
+            color: Colors.black.withValues(alpha: 0.5),
             offset: const Offset(3, 3),
             blurRadius: 3,
           ),

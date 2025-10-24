@@ -93,7 +93,7 @@ class _ExpensesState extends State<Expenses> {
       ),
       body: Column(
         children: [
-          ExpensesChart(),
+          ExpensesChart(expenses: _registeredExpenses),
           Expanded(child: mainContent),
         ],
       ),
