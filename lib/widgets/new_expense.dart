@@ -103,8 +103,13 @@ class _NewExpenseState extends State<NewExpense> {
             TextField(
               controller: _titleController,
               maxLength: 50,
+              style: const TextStyle(color: Colors.black),
               decoration: const InputDecoration(
                 label: Text('Title'),
+                floatingLabelStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: 22,
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -113,9 +118,14 @@ class _NewExpenseState extends State<NewExpense> {
                 Expanded(
                   child: TextField(
                     controller: _amountController,
-                    decoration: InputDecoration(
+                    style: const TextStyle(color: Colors.black),
+                    decoration: const InputDecoration(
                       suffixText: ' EGP',
                       label: Text('Amount'),
+                      floatingLabelStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 22,
+                      ),
                     ),
                     keyboardType: TextInputType.number,
                   ),
@@ -178,12 +188,14 @@ class _NewExpenseState extends State<NewExpense> {
                   },
                   child: Text(
                     'Cancel',
+                    style: TextStyle(fontSize: 14),
                   ),
                 ),
                 ElevatedButton(
                   onPressed: _submitExpenseData,
                   child: const Text(
                     'Save Expense',
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
               ],
